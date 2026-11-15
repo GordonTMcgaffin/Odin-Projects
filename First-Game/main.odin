@@ -4,10 +4,12 @@ import "core:fmt"
 import "src/menu"
 import rl "vendor:raylib"
 
+import "src/utilities"
+
 main :: proc() {
 
+	game_settings: utilities.GameSettings = utilities.load_game_context()
 
-	rl.InitWindow(1200, 720, "My First Game")
 	defer rl.CloseWindow()
 	// rl.ToggleFullscreen()
 
@@ -20,7 +22,19 @@ main :: proc() {
 		rl.ClearBackground(rl.DARKGRAY)
 
 		if state == "MENU" {
-			menu.draw_menu()
+			state = menu.draw_pause_menu(&game_settings)
+
+			if state == "QUIT" {
+				break
+			}
+		}
+
+		if state == "SETTINGS" {
+			state = menu.draw_settings_menu(&game_settings)
+
+			if state == "QUIT" {
+				break
+			}
 		}
 
 
